@@ -119,7 +119,7 @@ class Solutions {
 
 fun main() {
     val solution = Solutions()
-    val day = 4
+    val day = 5
     val dayString = day.toString().padStart(2, '0')
     logger.info { "Solving Puzzles for Day $dayString: " }
 

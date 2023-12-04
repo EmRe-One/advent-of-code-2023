@@ -9,13 +9,12 @@ object Day01 {
 
     fun part1(input: List<String>): Int {
         return input
-            .map { line ->
+            .sumOf { line ->
                 val first = line.first { c -> c.isDigit() }
                 val last = line.last { c -> c.isDigit() }
 
-                (first.toString() + last.toString()).toInt()
+                "$first$last".toInt()
             }
-            .sumOf { it }
     }
 
     fun part2(input: List<String>): Int {
@@ -28,9 +27,9 @@ object Day01 {
                     value?.let { v -> spelledDigits[v] ?: v.toInt() }
                 }.toList()
 
-                val first = matches.first()!!.toInt()
-                val last = matches.last()!!.toInt()
-
+                val first = matches.first()!!
+                val last = matches.last()!!
+                
                 first * 10 + last
             }
 

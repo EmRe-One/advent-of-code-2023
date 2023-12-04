@@ -8,6 +8,8 @@ build
 venv
 session.cookie
 
+src/**/resources/*.txt
+
 *.iml
 
 keys.properties
