@@ -8,7 +8,7 @@ build
 venv
 session.cookie
 
-src/**/resources/*.txt
+src/**/*.txt
 
 *.iml
 
