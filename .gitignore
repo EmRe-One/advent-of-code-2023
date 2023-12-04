@@ -4,6 +4,10 @@
 lib
 build
 
+.aoc_tiles_cache
+venv
+session.cookie
+
 *.iml
 
 keys.properties
