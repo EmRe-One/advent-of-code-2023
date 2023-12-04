@@ -1,6 +1,6 @@
 ![Kotlin](https://img.shields.io/badge/Kotlin-grey?logo=Kotlin&style=for-the-badge)
-![](https://img.shields.io/badge/📅%20days-03-005060?style=for-the-badge)
-![](https://img.shields.io/badge/⭐%20stars-04-005060?style=for-the-badge)
+![](https://img.shields.io/badge/📅%20days-04-005060?style=for-the-badge)
+![](https://img.shields.io/badge/⭐%20stars-06-005060?style=for-the-badge)
 
 # Advent-of-Code 2023
 
@@ -32,6 +32,7 @@ python ./create_tiles.py
 | [Day 01](https://adventofcode.com/2023/day/1) | [Day01Test.kt](./src/test/kotlin/tr/emreone/adventofcode/days/Day01Test.kt) | [Day01.kt](./src/main/kotlin/tr/emreone/adventofcode/days/Day01.kt) | ![Day 01](./aoc_tiles/2023/01.png) |
 | [Day 02](https://adventofcode.com/2023/day/2) | [Day02Test.kt](./src/test/kotlin/tr/emreone/adventofcode/days/Day02Test.kt) | [Day02.kt](./src/main/kotlin/tr/emreone/adventofcode/days/Day02.kt) | ![Day 02](./aoc_tiles/2023/02.png) |
 | [Day 03](https://adventofcode.com/2023/day/3) | [Day03Test.kt](./src/test/kotlin/tr/emreone/adventofcode/days/Day03Test.kt) | [Day03.kt](./src/main/kotlin/tr/emreone/adventofcode/days/Day03.kt) | ![Day 03](./aoc_tiles/2023/03.png) |
+| [Day 04](https://adventofcode.com/2023/day/4) | [Day04Test.kt](./src/test/kotlin/tr/emreone/adventofcode/days/Day04Test.kt) | [Day04.kt](./src/main/kotlin/tr/emreone/adventofcode/days/Day04.kt) | ![Day 04](./aoc_tiles/2023/04.png) |
 <!-- $1 -->
 
 ---
