@@ -99,7 +99,7 @@ class Solutions {
         logger.info { part2 }
     }
     fun solveDay05() {
-        val input = Resources.resourceAsList(fileName = "day05.txt")
+        val input = Resources.resourceAsText(fileName = "day05.txt")
 
         val (part1, elapsedTime1) = measureTimedValue {
             Day05.part1(input)

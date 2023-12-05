@@ -1,3 +1,8 @@
+import org.gradle.kotlin.dsl.support.kotlinCompilerOptions
+import org.jetbrains.kotlin.gradle.plugin.kotlinToolingVersion
+import java.net.HttpURLConnection
+import java.net.URL
+
 plugins {
     kotlin("jvm") version "1.9.20"
     kotlin("plugin.serialization") version "1.9.20"
@@ -20,8 +25,13 @@ fun getValue(key: String, filename: String = "../keys.properties"): String {
 }
 
 java {
-    sourceCompatibility = JavaVersion.VERSION_11
-    targetCompatibility = JavaVersion.VERSION_11
+    sourceCompatibility = JavaVersion.VERSION_19
+    targetCompatibility = JavaVersion.VERSION_19
+}
+
+tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
+    // Do not use, no effect; will be overridden by kotlinDslPluginOptions.jvmTarget, see KotlinDslCompilerPlugins.
+    kotlinOptions.jvmTarget = JavaVersion.VERSION_19.toString()
 }
 
 repositories {
@@ -67,9 +77,35 @@ tasks {
     }
 
     wrapper {
-        gradleVersion = "7.5.1"
+        gradleVersion = "8.5"
     }
 }
+
+//tasks.register("downloadInput") {
+//    doLast {
+//        // URL to download from
+//        val url = URL("https://example.com/textfile.txt")
+//        val connection = url.openConnection()
+//
+//        // Timeout settings (optional)
+//        connection.connectTimeout = 5000
+//        connection.readTimeout = 5000
+//
+//        // Check for successful response
+//        if (connection.statusCode == HttpURLConnection.HTTP_OK) {
+//            // Read the content
+//            val content = connection.content.toString()
+//
+//            // Define the output file path
+//            val outputFile = File("$projectDir/src/main/resources/downloaded_text.txt")
+//
+//            // Write the content to the file
+//            outputFile.writeText(content)
+//        } else {
+//            println("Failed to download the file: HTTP error code ${connection}")
+//        }
+//    }
+//}
 
 tasks.register("prepareNextDay") {
     var day = 1
