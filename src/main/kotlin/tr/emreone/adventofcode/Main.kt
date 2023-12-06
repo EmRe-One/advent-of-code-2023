@@ -1,8 +1,13 @@
 package tr.emreone.adventofcode
 
+import com.github.ajalt.mordant.rendering.TextColors
+import com.github.ajalt.mordant.terminal.Terminal
+import org.reflections.Reflections
 import tr.emreone.adventofcode.days.*
 import tr.emreone.kotlin_utils.Logger.logger
 import tr.emreone.kotlin_utils.Resources
+import tr.emreone.kotlin_utils.automation.Day
+import kotlin.time.Duration
 import kotlin.time.ExperimentalTime
 import kotlin.time.measureTimedValue
 
@@ -117,6 +122,9 @@ class Solutions {
 
 }
 
+private fun getAllDayClasses(): Collection<Class<out Day>> =
+    Reflections("").getSubTypesOf(Day::class.java).filter { it.simpleName.matches(Regex("Day\\d+")) }
+
 fun main() {
     val solution = Solutions()
     val day = 5
@@ -129,5 +137,18 @@ fun main() {
     } catch (e: Exception) {
         e.printStackTrace()
         logger.error { "Day $dayString is not implemented yet!" }
+    }
+
+
+    val aocTerminal = Terminal()
+
+    with(aocTerminal) {
+        println(com.github.ajalt.mordant.rendering.TextColors.red("\n~~~ Advent Of Code Runner ~~~\n"))
+        val dayClasses = getAllDayClasses().sortedBy(::dayNumber)
+        val totalDuration = dayClasses
+            .map { it.execute() }
+            .reduceOrNull(kotlin.time.Duration::plus)
+
+        println("\nTotal runtime: ${com.github.ajalt.mordant.rendering.TextColors.red("$totalDuration")}")
     }
 }
