@@ -1,8 +1,8 @@
 package tr.emreone.adventofcode
 
 import tr.emreone.adventofcode.days.*
-import tr.emreone.utils.Logger.logger
-import tr.emreone.utils.Resources
+import tr.emreone.kotlin_utils.Logger.logger
+import tr.emreone.kotlin_utils.Resources
 import kotlin.time.ExperimentalTime
 import kotlin.time.measureTimedValue
 

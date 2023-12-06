@@ -1,8 +1,6 @@
 package tr.emreone.adventofcode.days
 
-import kotlinx.coroutines.coroutineScope
-import kotlinx.coroutines.withContext
-import tr.emreone.utils.Logger.logger
+import tr.emreone.kotlin_utils.Logger.logger
 
 object Day05 {
 

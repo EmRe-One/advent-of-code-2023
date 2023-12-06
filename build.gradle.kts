@@ -1,8 +1,3 @@
-import org.gradle.kotlin.dsl.support.kotlinCompilerOptions
-import org.jetbrains.kotlin.gradle.plugin.kotlinToolingVersion
-import java.net.HttpURLConnection
-import java.net.URL
-
 plugins {
     kotlin("jvm") version "1.9.20"
     kotlin("plugin.serialization") version "1.9.20"
@@ -12,16 +7,15 @@ plugins {
 group = "tr.emreone.adventofcode"
 version = "2023"
 
-fun getValue(key: String, filename: String = "../keys.properties"): String {
-    val items = HashMap<String, String>()
-    val f = File(filename)
-
-    f.forEachLine {
-        val split = it.split("=")
-        items[split[0].trim()] = split[1].trim().removeSurrounding("\"")
+repositories {
+    mavenCentral()
+    maven {
+        url = uri("https://maven.pkg.github.com/Emre-One/kotlin-utils")
+        credentials {
+            username = getValue("GITHUB_USERNAME")
+            password = getValue("GITHUB_TOKEN")
+        }
     }
-
-    return items[key]?: throw IllegalArgumentException("Key $key not found")
 }
 
 java {
@@ -34,14 +28,17 @@ tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
     kotlinOptions.jvmTarget = JavaVersion.VERSION_19.toString()
 }
 
-repositories {
-    mavenCentral()
-    maven {
-        url = uri("https://maven.pkg.github.com/Emre-One/kotlin-utils")
-        credentials {
-            username = getValue("GITHUB_USERNAME")
-            password = getValue("GITHUB_TOKEN")
+tasks {
+    sourceSets {
+        main {
+            java.srcDirs("src/main/kotlin")
         }
+    }
+    test {
+        useJUnitPlatform()
+    }
+    wrapper {
+        gradleVersion = "8.5"
     }
 }
 
@@ -60,25 +57,24 @@ dependencies {
     implementation("com.github.ajalt.mordant:mordant:2.0.0-beta7")
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.3.2")
 
-    implementation("tr.emreone:kotlin-utils:0.2.2")
+    implementation("tr.emreone:kotlin-utils:0.2.3")
 
     testImplementation(kotlin("test"))
 }
 
-tasks {
-    sourceSets {
-        main {
-            java.srcDirs("src/main/kotlin")
-        }
+/**
+ *
+ */
+fun getValue(key: String, filename: String = "../keys.properties"): String {
+    val items = HashMap<String, String>()
+    val f = File(filename)
+
+    f.forEachLine {
+        val split = it.split("=")
+        items[split[0].trim()] = split[1].trim().removeSurrounding("\"")
     }
 
-    test {
-        useJUnitPlatform()
-    }
-
-    wrapper {
-        gradleVersion = "8.5"
-    }
+    return items[key] ?: throw IllegalArgumentException("Key $key not found")
 }
 
 //tasks.register("downloadInput") {
@@ -121,9 +117,9 @@ tasks.register("prepareNextDay") {
         val withTest = true
         val packageIdPath = packageId.replace(".", "/")
 
-        val mainFile    = "${projectDir}/src/main/kotlin/${packageIdPath}/Main.kt"
-        val readmeFile  = "${projectDir}/README.md"
-        val newSrcFile  = "${projectDir}/src/main/kotlin/${packageIdPath}/days/Day${nextDay}.kt"
+        val mainFile = "${projectDir}/src/main/kotlin/${packageIdPath}/Main.kt"
+        val readmeFile = "${projectDir}/README.md"
+        val newSrcFile = "${projectDir}/src/main/kotlin/${packageIdPath}/days/Day${nextDay}.kt"
         val newTestFile = "${projectDir}/src/test/kotlin/${packageIdPath}/days/Day${nextDay}Test.kt"
 
         if (file(newSrcFile).exists()) {

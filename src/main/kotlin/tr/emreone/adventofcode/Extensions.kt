@@ -1,6 +1,6 @@
 package tr.emreone.adventofcode
 
-import tr.emreone.utils.math.Point2D
+import tr.emreone.kotlin_utils.math.Point2D
 import kotlin.math.abs
 
 fun String.readTextGroups(delimitter: String = "\n\n"): List<String> {
