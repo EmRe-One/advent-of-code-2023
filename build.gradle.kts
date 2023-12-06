@@ -54,10 +54,10 @@ dependencies {
     implementation("org.mariuszgromada.math:MathParser.org-mXparser:5.1.0")
 
     implementation("org.reflections:reflections:0.10.2")
-    implementation("com.github.ajalt.mordant:mordant:2.0.0-beta7")
+    implementation("com.github.ajalt.mordant:mordant:2.2.0")
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.3.2")
 
-    implementation("tr.emreone:kotlin-utils:0.2.3")
+    implementation("tr.emreone:kotlin-utils:0.3.1")
 
     testImplementation(kotlin("test"))
 }
