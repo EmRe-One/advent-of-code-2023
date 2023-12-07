@@ -1,6 +1,14 @@
 package tr.emreone.adventofcode.days
 
-object Day02 {
+import tr.emreone.kotlin_utils.Resources
+import tr.emreone.kotlin_utils.automation.Day
+
+class Day02: Day(
+    2,
+    2023,
+    "Cube Conundrum",
+    session = Resources.resourceAsString("session.cookie")
+) {
 
     class Bag(
         val red: Int = 0,
@@ -8,12 +16,15 @@ object Day02 {
         val blue: Int = 0
     ) {
 
-        fun possible(maxRed: Int, maxGreen: Int, maxBlue: Int): Boolean {
-            return this.red <= maxRed
-                    && this.green <= maxGreen
-                    && this.blue <= maxBlue;
-        }
+        val MAX_RED = 13
+        val MAX_GREEN = 14
+        val MAX_BLUE = 15
 
+        fun possible(): Boolean {
+            return this.red <= MAX_RED
+                    && this.green <= MAX_GREEN
+                    && this.blue <= MAX_BLUE;
+        }
     }
 
     private val GAME_PATTERN = "Game (?<id>\\d+)".toRegex()
@@ -42,17 +53,17 @@ object Day02 {
         }
     }
 
-    fun part1(input: List<String>, maxRed: Int = 0, maxGreen: Int = 0, maxBlue: Int = 0): Int {
-        return getBags(input)
+    override fun part1(): Int {
+        return getBags(inputAsList)
             .filterValues {
-                it.all { b -> b.possible(maxRed, maxGreen, maxBlue) }
+                it.all { b -> b.possible() }
             }
             .keys
             .sum()
     }
 
-    fun part2(input: List<String>): Int {
-        return getBags(input)
+    override fun part2(): Int {
+        return getBags(inputAsList)
             .map { (id, bags) ->
                 val minRed = bags.maxOf { it.red }
                 val minGreen = bags.maxOf { it.green }

@@ -7,6 +7,8 @@ import tr.emreone.adventofcode.days.*
 import tr.emreone.kotlin_utils.Logger.logger
 import tr.emreone.kotlin_utils.Resources
 import tr.emreone.kotlin_utils.automation.Day
+import tr.emreone.kotlin_utils.automation.dayNumber
+import tr.emreone.kotlin_utils.automation.execute
 import kotlin.time.Duration
 import kotlin.time.ExperimentalTime
 import kotlin.time.measureTimedValue
@@ -43,81 +45,6 @@ class Solutions {
             logger.info { result  }
         }
     }
-    fun solveDay01() {
-        val input = Resources.resourceAsList(fileName = "day01.txt")
-
-        val (part1, elapsedTime1) = measureTimedValue {
-            Day01.part1(input)
-        }
-        logger.info { "Part1 solved in $elapsedTime1:" }
-        logger.info { part1 }
-
-        val (part2, elapsedTime2) = measureTimedValue {
-            Day01.part2(input)
-        }
-        logger.info { "Part2 solved in $elapsedTime2:" }
-        logger.info { part2 }
-    }
-    fun solveDay02() {
-        val input = Resources.resourceAsList(fileName = "day02.txt")
-
-        val (part1, elapsedTime1) = measureTimedValue {
-            Day02.part1(input, 12, 13, 14)
-        }
-        logger.info { "Part1 solved in $elapsedTime1:" }
-        logger.info { part1 }
-
-        val (part2, elapsedTime2) = measureTimedValue {
-            Day02.part2(input)
-        }
-        logger.info { "Part2 solved in $elapsedTime2:" }
-        logger.info { part2 }
-    }
-    fun solveDay03() {
-        val input = Resources.resourceAsList(fileName = "day03.txt")
-
-        val (part1, elapsedTime1) = measureTimedValue {
-            Day03.part1(input)
-        }
-        logger.info { "Part1 solved in $elapsedTime1:" }
-        logger.info { part1 }
-
-        val (part2, elapsedTime2) = measureTimedValue {
-            Day03.part2(input)
-        }
-        logger.info { "Part2 solved in $elapsedTime2:" }
-        logger.info { part2 }
-    }
-    fun solveDay04() {
-        val input = Resources.resourceAsList(fileName = "day04.txt")
-
-        val (part1, elapsedTime1) = measureTimedValue {
-            Day04.part1(input)
-        }
-        logger.info { "Part1 solved in $elapsedTime1:" }
-        logger.info { part1 }
-
-        val (part2, elapsedTime2) = measureTimedValue {
-            Day04.part2(input)
-        }
-        logger.info { "Part2 solved in $elapsedTime2:" }
-        logger.info { part2 }
-    }
-    fun solveDay05() {
-        val input = Resources.resourceAsText(fileName = "day05.txt")
-
-        val (part1, elapsedTime1) = measureTimedValue {
-            Day05.part1(input)
-        }
-        logger.info { "Part1 solved in $elapsedTime1:" }
-        logger.info { part1 }
-
-        val (part2, elapsedTime2) = measureTimedValue {
-            Day05.part2(input)
-        }
-        logger.info { "Part2 solved in $elapsedTime2:" }
-        logger.info { part2 }
-    }
 // $1
 
 }
@@ -125,7 +52,9 @@ class Solutions {
 private fun getAllDayClasses(): Collection<Class<out Day>> =
     Reflections("").getSubTypesOf(Day::class.java).filter { it.simpleName.matches(Regex("Day\\d+")) }
 
+@OptIn(ExperimentalTime::class)
 fun main() {
+    /*
     val solution = Solutions()
     val day = 5
     val dayString = day.toString().padStart(2, '0')
@@ -138,7 +67,7 @@ fun main() {
         e.printStackTrace()
         logger.error { "Day $dayString is not implemented yet!" }
     }
-
+    */
 
     val aocTerminal = Terminal()
 

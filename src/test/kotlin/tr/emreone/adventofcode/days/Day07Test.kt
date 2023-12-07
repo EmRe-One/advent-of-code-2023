@@ -4,8 +4,8 @@ import tr.emreone.kotlin_utils.Resources
 import tr.emreone.kotlin_utils.automation.solve
 
 fun main() {
-    solve<Day04>(false) {
-        Resources.resourceAsList("day04_example.txt")
-            .joinToString("\n") part1 13 part2 30
+    solve<Day07>(false) {
+        Resources.resourceAsList("day07_example.txt")
+            .joinToString("\n") part1 0
     }
 }

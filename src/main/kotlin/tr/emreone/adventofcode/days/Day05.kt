@@ -1,8 +1,15 @@
 package tr.emreone.adventofcode.days
 
 import tr.emreone.kotlin_utils.Logger.logger
+import tr.emreone.kotlin_utils.Resources
+import tr.emreone.kotlin_utils.automation.Day
 
-object Day05 {
+class Day05: Day(
+    5,
+    2023,
+    "If You Give A Seed A Fertilizer",
+    session= Resources.resourceAsString("session.cookie")
+) {
 
     class Process {
 
@@ -42,8 +49,8 @@ object Day05 {
         }
     }
 
-    fun part1(input: String): Long {
-        val blocks = input.split("(\r?\n){2}".toRegex())
+    override fun part1(): Long {
+        val blocks = inputAsString.split("(\r?\n){2}".toRegex())
 
         val seeds = blocks[0].split(":")[1].trim().split("\\s".toRegex()).map { it.toLong() }
         val maps = blocks.drop(1).associate { m ->
@@ -88,8 +95,8 @@ object Day05 {
             }
     }
 
-    fun part2(input: String): Long {
-        val blocks = input.split("(\r?\n){2}".toRegex())
+    override fun part2(): Long {
+        val blocks = inputAsString.split("(\r?\n){2}".toRegex())
 
         val seedRanges = blocks[0]
             .split(":")[1]

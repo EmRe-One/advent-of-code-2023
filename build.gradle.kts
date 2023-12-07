@@ -57,7 +57,7 @@ dependencies {
     implementation("com.github.ajalt.mordant:mordant:2.2.0")
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.3.2")
 
-    implementation("tr.emreone:kotlin-utils:0.3.1")
+    implementation("tr.emreone:kotlin-utils:0.3.4")
 
     testImplementation(kotlin("test"))
 }

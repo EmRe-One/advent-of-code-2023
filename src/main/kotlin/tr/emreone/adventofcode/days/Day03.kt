@@ -1,6 +1,14 @@
 package tr.emreone.adventofcode.days
 
-object Day03 {
+import tr.emreone.kotlin_utils.Resources
+import tr.emreone.kotlin_utils.automation.Day
+
+class Day03: Day(
+    3,
+    2023,
+    "Gear Ratios",
+    session= Resources.resourceAsString("session.cookie")
+) {
 
     class Part(val x: Int, val y: Int, val value: Int) {
         fun getNeighbourFields(engine: Engine): List<Char> {
@@ -73,8 +81,8 @@ object Day03 {
         }
     }
 
-    fun part1(input: List<String>): Int {
-        val engine = Engine.parse(input)
+    override fun part1(): Int {
+        val engine = Engine.parse(inputAsList)
 
         val filteredParts = engine.parts.filter { part ->
             part.getNeighbourFields(engine).any {
@@ -85,8 +93,8 @@ object Day03 {
         return filteredParts.sumOf { it.value }
     }
 
-    fun part2(input: List<String>): Long {
-        val engine = Engine.parse(input)
+    override fun part2(): Long {
+        val engine = Engine.parse(inputAsList)
 
         var sum = 0L
         engine.field.forEachIndexed { y, line ->
