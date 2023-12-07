@@ -17,6 +17,7 @@ class Day07 : Day(
             .reversed()
 
         val setOfCards = hand.toCharArray().groupBy { it }
+        val adjustedHand = replaceJoker()
 
         fun rank(): Int {
             val sortedCardSet = setOfCards.entries.sortedBy {
@@ -48,6 +49,20 @@ class Day07 : Day(
             }
         }
 
+        fun replaceJoker(): String {
+            if (this.hand.contains("J")) {
+                val maxChar = this.hand.toCharArray()
+                    .filter { it != 'J' }
+                    .groupBy { it }
+                    .maxBy { it.value.size }
+                    .key
+                
+            }
+            else {
+                return ""
+            }
+        }
+
         override fun compareTo(other: Hand): Int {
             if (this.rank() < other.rank()) return -1
             if (this.rank() > other.rank()) return 1
@@ -61,18 +76,6 @@ class Day07 : Day(
         }
 
         fun compareToWithJoker(other: Hand): Int {
-            val thisNew = if (this.hand.contains("J")) {
-                val maxChar = this.hand.toCharArray()
-                    .filter { it != 'J' }
-                    .groupBy { it }
-                    .maxBy { it.value.size }
-                    .key
-
-            }
-            else {
-
-            }
-
             if (this.rank() < other.rank()) return -1
             if (this.rank() > other.rank()) return 1
 
