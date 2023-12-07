@@ -6,6 +6,6 @@ import tr.emreone.kotlin_utils.automation.solve
 fun main() {
     solve<Day07>(false) {
         Resources.resourceAsList("day07_example.txt")
-            .joinToString("\n") part1 0
+            .joinToString("\n") part1 6440 part2 5905
     }
 }
