@@ -1,6 +1,6 @@
 ![Kotlin](https://img.shields.io/badge/Kotlin-grey?logo=Kotlin&style=for-the-badge)
-![](https://img.shields.io/badge/📅%20days-04-005060?style=for-the-badge)
-![](https://img.shields.io/badge/⭐%20stars-06-005060?style=for-the-badge)
+![](https://img.shields.io/badge/📅%20days-08-005060?style=for-the-badge)
+![](https://img.shields.io/badge/⭐%20stars-16-005060?style=for-the-badge)
 
 # Advent-of-Code 2023
 
