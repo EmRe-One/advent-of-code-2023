@@ -9,6 +9,7 @@ venv
 session.cookie
 
 src/**/*.txt
+!src/test/**/*.txt
 
 *.iml
 
