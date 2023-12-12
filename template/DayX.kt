@@ -1,14 +1,21 @@
 package tr.emreone.adventofcode.days
 
-object Day$1 {
+import tr.emreone.kotlin_utils.Resources
+import tr.emreone.kotlin_utils.automation.Day
 
-    fun part1(input: List<String>): Int {
+class Day$1 : Day(
+    $1,
+    2023,
+    "",
+    session = Resources.resourceAsString("session.cookie")
+) {
 
+    override fun part1(): Int {
         return 0
     }
 
-    fun part2(input: List<String>): Int {
-
+    override fun part2(): Long {
         return 0
     }
+
 }

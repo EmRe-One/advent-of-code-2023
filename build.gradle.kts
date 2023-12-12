@@ -77,32 +77,6 @@ fun getValue(key: String, filename: String = "../keys.properties"): String {
     return items[key] ?: throw IllegalArgumentException("Key $key not found")
 }
 
-//tasks.register("downloadInput") {
-//    doLast {
-//        // URL to download from
-//        val url = URL("https://example.com/textfile.txt")
-//        val connection = url.openConnection()
-//
-//        // Timeout settings (optional)
-//        connection.connectTimeout = 5000
-//        connection.readTimeout = 5000
-//
-//        // Check for successful response
-//        if (connection.statusCode == HttpURLConnection.HTTP_OK) {
-//            // Read the content
-//            val content = connection.content.toString()
-//
-//            // Define the output file path
-//            val outputFile = File("$projectDir/src/main/resources/downloaded_text.txt")
-//
-//            // Write the content to the file
-//            outputFile.writeText(content)
-//        } else {
-//            println("Failed to download the file: HTTP error code ${connection}")
-//        }
-//    }
-//}
-
 tasks.register("prepareNextDay") {
     var day = 1
     var packageId = ""
@@ -131,32 +105,8 @@ tasks.register("prepareNextDay") {
                     .replace("$1", nextDay)
             )
 
-            file("${projectDir}/src/main/resources/day${nextDay}.txt")
-                .writeText("")
-
-            file(mainFile).writeText(
-                file(mainFile).readText()
-                    .replace(
-                        "// $1", """
-                        |    fun solveDay${nextDay}() {
-                        |        val input = Resources.resourceAsList(fileName = "day${nextDay}.txt")
-                        |
-                        |        val (part1, elapsedTime1) = measureTimedValue {
-                        |            Day${nextDay}.part1(input)
-                        |        }
-                        |        logger.info { "Part1 solved in ${"$"}elapsedTime1:" }
-                        |        logger.info { part1 }
-                        |
-                        |        val (part2, elapsedTime2) = measureTimedValue {
-                        |            Day${nextDay}.part2(input)
-                        |        }
-                        |        logger.info { "Part2 solved in ${"$"}elapsedTime2:" }
-                        |        logger.info { part2 }
-                        |    }
-                        |// ${"$1"}
-                        """.trimMargin()
-                    )
-            )
+            //file("${projectDir}/src/main/resources/day${nextDay}.txt")
+            //    .writeText("")
 
             file(readmeFile).writeText(
                 file(readmeFile).readText()

@@ -181,7 +181,7 @@ class Day10 : Day(
         return path.size / 2
     }
 
-    override fun part2(): Long {
+    override fun part2(): Int {
         val maze = Maze(inputAsGrid)
 
         val start = maze.grid.flatten().first {
@@ -198,7 +198,7 @@ class Day10 : Day(
 
         val enclosed = maze.grid.flatten().count {
             maze.isCellEnclosed(it.x, it.y)
-        }.toLong()
+        }
 
         maze.print()
 
