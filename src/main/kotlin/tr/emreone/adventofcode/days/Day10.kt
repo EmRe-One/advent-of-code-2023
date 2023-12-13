@@ -1,15 +1,9 @@
 package tr.emreone.adventofcode.days
 
-import tr.emreone.kotlin_utils.Resources
 import tr.emreone.kotlin_utils.automation.Day
 import java.util.*
 
-class Day10 : Day(
-    10,
-    2023,
-    "Pipe Maze",
-    session = Resources.resourceAsString("session.cookie")
-) {
+class Day10 : Day(10, 2023, "Pipe Maze") {
 
     class Maze(input: List<List<Char>>) {
         val NORTH_EAST = '└'  // oder 'L'
@@ -36,13 +30,13 @@ class Day10 : Day(
          */
         private fun convertChar(c: Char): Char {
             return when (c) {
-                'L'  -> NORTH_EAST
-                'J'  -> NORTH_WEST
-                '|'  -> NORTH_SOUTH
-                'F'  -> SOUTH_EAST
-                '7'  -> SOUTH_WEST
-                '-'  -> WEST_EAST
-                'S'  -> 'S'
+                'L' -> NORTH_EAST
+                'J' -> NORTH_WEST
+                '|' -> NORTH_SOUTH
+                'F' -> SOUTH_EAST
+                '7' -> SOUTH_WEST
+                '-' -> WEST_EAST
+                'S' -> 'S'
                 else -> EMPTY_CELL_CHAR
             }
         }
@@ -76,20 +70,19 @@ class Day10 : Day(
                 it.value.pipeChar != EMPTY_CELL_CHAR
             }
             val lookAtDirection = when (pipe.pipeChar) {
-                'S'         -> listOf('N', 'E', 'S', 'W')
+                'S' -> listOf('N', 'E', 'S', 'W')
                 NORTH_SOUTH -> listOf('N', 'S')
-                WEST_EAST   -> listOf('W', 'E')
-                NORTH_EAST  -> listOf('N', 'E')
-                NORTH_WEST  -> listOf('N', 'W')
-                SOUTH_WEST  -> listOf('S', 'W')
-                SOUTH_EAST  -> listOf('S', 'E')
-                else        -> throw IllegalArgumentException()
+                WEST_EAST -> listOf('W', 'E')
+                NORTH_EAST -> listOf('N', 'E')
+                NORTH_WEST -> listOf('N', 'W')
+                SOUTH_WEST -> listOf('S', 'W')
+                SOUTH_EAST -> listOf('S', 'E')
+                else -> throw IllegalArgumentException()
             }
             return neighboursCompass.mapNotNull {
                 if (it.key in lookAtDirection && it.value.pipeChar in allowedPipesInDirection[it.key]!!) {
                     it.value
-                }
-                else {
+                } else {
                     null
                 }
             }
@@ -121,8 +114,7 @@ class Day10 : Day(
                 grid[y].subList(0, x).count {
                     it.pipeChar in PIPES_TO_NORTH
                 }
-            }
-            else {
+            } else {
                 grid[y].subList(x, this.width).count {
                     it.pipeChar in PIPES_TO_NORTH
                 }

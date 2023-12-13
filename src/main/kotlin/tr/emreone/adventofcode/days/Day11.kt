@@ -1,16 +1,10 @@
 package tr.emreone.adventofcode.days
 
-import tr.emreone.kotlin_utils.Resources
 import tr.emreone.kotlin_utils.automation.Day
 import tr.emreone.kotlin_utils.manhattanDistanceTo
 import tr.emreone.kotlin_utils.math.Coords
 
-class Day11 : Day(
-    11,
-    2023,
-    "Cosmic Expansion",
-    session = Resources.resourceAsString("session.cookie")
-) {
+class Day11 : Day(11, 2023, "Cosmic Expansion") {
 
     class Galaxy(x: Int, y: Int) {
         var coord = Coords(x, y)
@@ -82,7 +76,7 @@ class Day11 : Day(
         val universe = Universe(inputAsGrid)
         universe.expand()
 
-        return universe.map.sumOf {a ->
+        return universe.map.sumOf { a ->
             universe.map.sumOf { b ->
                 a.distanceTo(b)
             }
@@ -93,7 +87,7 @@ class Day11 : Day(
         val universe = Universe(inputAsGrid)
         universe.expand(1_000_000)
 
-        return universe.map.sumOf {a ->
+        return universe.map.sumOf { a ->
             universe.map.sumOf { b ->
                 a.distanceTo(b).toLong()
             }

@@ -1,25 +1,17 @@
 package tr.emreone.adventofcode.days
 
-import tr.emreone.kotlin_utils.Resources
 import tr.emreone.kotlin_utils.automation.Day
 
-class Day06 : Day(
-    6,
-    2023,
-    "Wait For It",
-    session = Resources.resourceAsString("session.cookie")
-) {
+class Day06 : Day(6, 2023, "Wait For It") {
 
     class Race(val time: Long, val distance: Long) {
-
         /**
          *
          */
         fun getClickDurationsForWin(): List<Pair<Long, Long>> {
             val results = mutableListOf<Pair<Long, Long>>()
 
-            for (t in 1 .. this.time/2) {
-                val clickLength = t
+            for (t in 1..this.time / 2) {
                 val speed = t
                 val remainingTime = this.time - t
 
@@ -36,7 +28,7 @@ class Day06 : Day(
         }
     }
 
-    override fun part1(): Any? {
+    override fun part1(): Int {
         val lineNumbers = inputAsList.map { line ->
             line.split(":")[1]
                 .trim()
@@ -55,7 +47,7 @@ class Day06 : Day(
             }
     }
 
-    override fun part2(): Any? {
+    override fun part2(): Int {
         val lineNumbers = inputAsList.map {
             it.split(":")[1]
                 .replace("\\s+".toRegex(), "")

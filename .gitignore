@@ -11,6 +11,8 @@ session.cookie
 src/**/*.txt
 !src/test/**/*.txt
 
+puzzles
+
 *.iml
 
 keys.properties

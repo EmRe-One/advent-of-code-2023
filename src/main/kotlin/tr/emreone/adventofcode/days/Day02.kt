@@ -1,21 +1,14 @@
 package tr.emreone.adventofcode.days
 
-import tr.emreone.kotlin_utils.Resources
 import tr.emreone.kotlin_utils.automation.Day
 
-class Day02: Day(
-    2,
-    2023,
-    "Cube Conundrum",
-    session = Resources.resourceAsString("session.cookie")
-) {
+class Day02 : Day(2, 2023, "Cube Conundrum") {
 
     class Bag(
         val red: Int = 0,
         val green: Int = 0,
         val blue: Int = 0
     ) {
-
         val MAX_RED = 13
         val MAX_GREEN = 14
         val MAX_BLUE = 15
@@ -64,7 +57,7 @@ class Day02: Day(
 
     override fun part2(): Int {
         return getBags(inputAsList)
-            .map { (id, bags) ->
+            .map { (_, bags) ->
                 val minRed = bags.maxOf { it.red }
                 val minGreen = bags.maxOf { it.green }
                 val minBlue = bags.maxOf { it.blue }

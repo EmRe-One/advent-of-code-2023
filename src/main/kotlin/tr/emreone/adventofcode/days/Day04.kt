@@ -1,15 +1,9 @@
 package tr.emreone.adventofcode.days
 
-import tr.emreone.kotlin_utils.Resources
 import tr.emreone.kotlin_utils.automation.Day
 import kotlin.math.pow
 
-class Day04: Day(
-    4,
-    2023,
-    "Scratchcards",
-    session= Resources.resourceAsString("session.cookie")
-) {
+class Day04 : Day(4, 2023, "Scratchcards") {
 
     private fun parseMatches(input: List<String>): Map<Int, Int> {
         return input.associate { line ->
@@ -28,7 +22,7 @@ class Day04: Day(
 
     override fun part1(): Int {
         return parseMatches(inputAsList)
-            .map { (id, matches) ->
+            .map { (_, matches) ->
                 if (matches == 0) {
                     0
                 } else {

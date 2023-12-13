@@ -1,14 +1,8 @@
 package tr.emreone.adventofcode.days
 
-import tr.emreone.kotlin_utils.Resources
 import tr.emreone.kotlin_utils.automation.Day
 
-class Day01: Day(
-    1,
-    2023,
-    "Trebuchet?!",
-    session= Resources.resourceAsString("session.cookie")
-) {
+class Day01 : Day(1, 2023, "Trebuchet?!") {
 
     private val spelledDigits = mapOf(
         "one" to 1, "two" to 2, "three" to 3, "four" to 4, "five" to 5,
@@ -37,7 +31,7 @@ class Day01: Day(
 
                 val first = matches.first()!!
                 val last = matches.last()!!
-                
+
                 first * 10 + last
             }
 

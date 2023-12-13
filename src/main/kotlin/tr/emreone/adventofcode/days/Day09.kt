@@ -1,24 +1,17 @@
 package tr.emreone.adventofcode.days
 
-import tr.emreone.adventofcode.days.Sequence
-import tr.emreone.kotlin_utils.Resources
 import tr.emreone.kotlin_utils.automation.Day
 
 typealias Sequence = MutableList<Long>
 
-class Day09 : Day(
-    9,
-    2023,
-    "Mirage Maintenance",
-    session = Resources.resourceAsString("session.cookie")
-) {
+class Day09 : Day(9, 2023, "Mirage Maintenance") {
 
     private fun predictNext(sequence: Sequence): Long {
         val differences = mutableListOf<Sequence>()
 
         differences.add(sequence.windowed(2).map { it[1] - it[0] }.toMutableList())
 
-        while(differences.last().any { it != 0L }) {
+        while (differences.last().any { it != 0L }) {
             val lastDifferences = differences.last()
             differences.add(lastDifferences.windowed(2).map { it[1] - it[0] }.toMutableList())
         }
@@ -45,7 +38,7 @@ class Day09 : Day(
 
         differences.add(sequence.windowed(2).map { it[1] - it[0] }.toMutableList())
 
-        while(differences.last().any { it != 0L }) {
+        while (differences.last().any { it != 0L }) {
             val lastDifferences = differences.last()
             differences.add(lastDifferences.windowed(2).map { it[1] - it[0] }.toMutableList())
         }

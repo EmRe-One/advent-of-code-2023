@@ -1,14 +1,8 @@
 package tr.emreone.adventofcode.days
 
-import tr.emreone.kotlin_utils.Resources
 import tr.emreone.kotlin_utils.automation.Day
 
-class Day03: Day(
-    3,
-    2023,
-    "Gear Ratios",
-    session= Resources.resourceAsString("session.cookie")
-) {
+class Day03 : Day(3, 2023, "Gear Ratios") {
 
     class Part(val x: Int, val y: Int, val value: Int) {
         fun getNeighbourFields(engine: Engine): List<Char> {
@@ -21,7 +15,7 @@ class Day03: Day(
                 . . . . .
              */
             val valueLength = value.toString().length
-            for(dx in -1..valueLength) {
+            for (dx in -1..valueLength) {
                 val x = this.x + dx
                 for (dy in -1..1) {
                     val y = this.y + dy
@@ -44,8 +38,8 @@ class Day03: Day(
 
         fun isAdjacentTo(x: Int, y: Int): Boolean {
             val valueLength = value.toString().length
-            return x in (this.x-1)..(this.x+valueLength)
-                    && y in (this.y-1)..(this.y+1)
+            return x in (this.x - 1)..(this.x + valueLength)
+                    && y in (this.y - 1)..(this.y + 1)
         }
     }
 
@@ -58,22 +52,22 @@ class Day03: Day(
         }
 
         val parts = mutableListOf<Part>()
+
         init {
-            for(y in this.field.indices) {
+            for (y in this.field.indices) {
                 var startX = 0
-                while(startX < this.field[y].size) {
+                while (startX < this.field[y].size) {
                     val currentChar = this.field[y][startX]
                     if (currentChar.isDigit()) {
                         var endX = startX + 1
-                        while(endX in this.field[y].indices && this.field[y][endX].isDigit()) {
+                        while (endX in this.field[y].indices && this.field[y][endX].isDigit()) {
                             endX++
                         }
                         val value = this.field[y].joinToString("")
                             .substring(startX until endX).toInt()
                         this.parts.add(Part(startX, y, value))
                         startX = endX
-                    }
-                    else {
+                    } else {
                         startX++
                     }
                 }

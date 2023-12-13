@@ -1,15 +1,9 @@
 package tr.emreone.adventofcode.days
 
-import tr.emreone.kotlin_utils.Resources
 import tr.emreone.kotlin_utils.automation.Day
 import tr.emreone.kotlin_utils.extensions.times
 
-class Day07 : Day(
-    7,
-    2023,
-    "Camel Cards",
-    session = Resources.resourceAsString("session.cookie")
-) {
+class Day07 : Day(7, 2023, "Camel Cards") {
 
     class Hand(val hand: String, val value: Int, val withJoker: Boolean = false) : Comparable<Hand> {
         val CARDS = buildList<String> {
@@ -107,7 +101,7 @@ class Day07 : Day(
             .sum()
     }
 
-    override fun part2(): Any? {
+    override fun part2(): Long {
         val sortedValues = inputAsList
             .map {
                 val (hand, value) = it.split(" ")
