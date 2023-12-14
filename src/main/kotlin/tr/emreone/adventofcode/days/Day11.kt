@@ -1,8 +1,8 @@
 package tr.emreone.adventofcode.days
 
 import tr.emreone.kotlin_utils.automation.Day
-import tr.emreone.kotlin_utils.manhattanDistanceTo
 import tr.emreone.kotlin_utils.math.Coords
+import tr.emreone.kotlin_utils.math.manhattanDistanceTo
 
 class Day11 : Day(11, 2023, "Cosmic Expansion") {
 

@@ -1,9 +1,7 @@
 package tr.emreone.adventofcode.days
 
-import tr.emreone.kotlin_utils.Resources
 import tr.emreone.kotlin_utils.automation.Day
-import tr.emreone.kotlin_utils.lcm
-import java.lang.IllegalStateException
+import tr.emreone.kotlin_utils.math.lcm
 
 class Day08 : Day(8, 2023, "Haunted Wasteland") {
 
@@ -29,11 +27,11 @@ class Day08 : Day(8, 2023, "Haunted Wasteland") {
 
     override fun part1(): Int {
         val (command, maps) = parseInput()
-        var currentPosition ="AAA"
+        var currentPosition = "AAA"
 
         var counter = 0
         val totalCommands = command.size
-        while(currentPosition != "ZZZ") {
+        while (currentPosition != "ZZZ") {
             val index = (counter.mod(totalCommands))
             // print("%6d: $currentPosition to ($index -> ${ if (command[index] == 0) 'L' else 'R'}) ".format(counter))
             currentPosition = maps[currentPosition]?.get(command[index]) ?: throw IllegalStateException()
@@ -54,7 +52,7 @@ class Day08 : Day(8, 2023, "Haunted Wasteland") {
             var currentPosition = it
 
             var counter = 0L
-            while(!currentPosition.endsWith('Z')) {
+            while (!currentPosition.endsWith('Z')) {
                 val index = (counter.mod(totalCommands))
                 currentPosition = maps[currentPosition]?.get(command[index]) ?: throw IllegalStateException()
                 counter++
