@@ -1,53 +1,29 @@
 package tr.emreone.adventofcode
 
-import tr.emreone.kotlin_utils.math.Point2D
-import kotlin.math.abs
+import java.util.concurrent.ConcurrentHashMap
 
-fun String.readTextGroups(delimitter: String = "\n\n"): List<String> {
-    return this.split(delimitter)
-}
+object CacheSupport {
+    private val _cache = ConcurrentHashMap<Any, MutableMap<*, *>>()
+    fun <T, R> withCaching(arg: T, cacheOwner: Any = Thread.currentThread(), perform: (T) -> R): R {
+        var created = false
 
-fun Point2D.manhattanDistanceTo(other: Point2D): Long {
-    return abs(x - other.x) + abs(y - other.y)
-}
-
-fun Point2D.move(direction: String, distance: Int): Point2D {
-    return when (direction.lowercase()) {
-        in arrayOf("u", "up", "n", "north", "norden")   -> Point2D(x, y + distance)
-        in arrayOf("d", "down", "s", "south", "sueden") -> Point2D(x, y - distance)
-        in arrayOf("r", "right", "e", "east", "osten")  -> Point2D(x + distance, y)
-        in arrayOf("l", "left", "w", "west", "westen")  -> Point2D(x - distance, y)
-        else                                            -> throw IllegalArgumentException("Unknown direction: $direction")
+        @Suppress("UNCHECKED_CAST")
+        val cache: MutableMap<T, R> = _cache.computeIfAbsent(cacheOwner) {
+            created = true
+            hashMapOf<T, R>()
+        } as MutableMap<T, R>
+        try {
+            return cache.getOrPut(arg) {
+                perform(arg)
+            }
+        } finally {
+            if (created) {
+                _cache.remove(cacheOwner)
+            }
+        }
     }
 }
 
 operator fun IntRange.contains(other: IntRange): Boolean {
     return this.contains(other.first) && this.contains(other.last)
 }
-
-infix fun IntRange.overlaps(other: IntRange): Boolean {
-    return this.first <= other.last && other.first <= this.last
-}
-
-fun List<Long>.product(): Long = this.reduce { acc, i -> acc * i }
-
-infix fun Long.isDivisibleBy(divisor: Int): Boolean = this % divisor == 0L
-
-// greatest common divisor
-infix fun Long.gcd(other: Long): Long {
-    var a = this
-    var b = other
-    while (b != 0L) {
-        val temp = b
-        b = a % b
-        a = temp
-    }
-    return a
-}
-
-// least common multiple
-infix fun Long.lcm(other: Long): Long = (this * other) / (this gcd other)
-
-fun List<Long>.gcd(): Long = this.reduce(Long::gcd)
-fun List<Long>.lcm(): Long = this.reduce(Long::lcm)
-
