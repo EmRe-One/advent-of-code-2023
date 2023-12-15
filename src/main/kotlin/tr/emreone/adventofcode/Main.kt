@@ -34,6 +34,11 @@ fun main() {
     with(aocTerminal) {
         println(TextColors.red("\n~~~ Advent Of Code Runner ~~~\n"))
         val dayClasses = getAllDayClasses().sortedBy(::dayNumber)
+
+        val dayNumber = prompt(
+            "Wählen Sie einen Tag aus (0 für alle, 1-25 für bestimmten Tag):"
+        )
+
         val totalDuration = dayClasses
             .map { it.execute() }
             .reduceOrNull(Duration::plus)
