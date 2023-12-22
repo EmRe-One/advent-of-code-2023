@@ -8,33 +8,20 @@ import tr.emreone.kotlin_utils.extensions.formatted
 import tr.emreone.kotlin_utils.math.*
 import java.util.LinkedList
 import kotlin.collections.forEach
+import kotlin.math.abs
 
 class Day18 : Day(18, 2023, "Lavaduct Lagoon") {
-
-/*
-    private val p2Instructions = input.map {
-        val (_, _, c) = it.split(' ')
-        val steps = c.drop(2).dropLast(2).toInt(16)
-        val dir = when (c.dropLast(1).last()) {
-            '0'  -> RIGHT
-            '1'  -> DOWN
-            '2'  -> LEFT
-            else -> UP
-        }
-        dir to steps
-    }
-*/
 
     override fun part1(): Int {
         val instructions = inputAsList.map {
             val (d, s, _) = it.split(' ')
-            val steps = s.toInt()
             val dir = when (d) {
-                "R"  -> Direction4.EAST
-                "D"  -> Direction4.SOUTH
-                "L"  -> Direction4.WEST
+                "R" -> Direction4.EAST
+                "D" -> Direction4.SOUTH
+                "L" -> Direction4.WEST
                 else -> Direction4.NORTH
             }
+            val steps = s.toInt()
             dir to steps
         }
 
@@ -66,7 +53,7 @@ class Day18 : Day(18, 2023, "Lavaduct Lagoon") {
         map.formatted(area = bigger) { x, c ->
             when {
                 x in seen -> "~"
-                else      -> "#"
+                else -> "#"
             }
         }
 
@@ -75,25 +62,45 @@ class Day18 : Day(18, 2023, "Lavaduct Lagoon") {
         return bigger.size - seen.size
     }
 
-/*
     override fun part2(): Long {
-        val boundary = p2Instructions.sumOf { it.second.toLong() }
-        val corners = p2Instructions.runningFold(origin) { acc, instruction ->
+        val instructions = inputAsList.map {
+            val (_, _, c) = it.split(' ')
+            // c is the color in braces in hex with 6 digits
+            // e.g. c = (#159ABC)
+            val dir = when (c.dropLast(1).last()) {
+                '0' -> Direction4.EAST
+                '1' -> Direction4.SOUTH
+                '2' -> Direction4.WEST
+                else -> Direction4.NORTH
+            }
+            val steps = c
+                .drop(2)        // remove (#
+                .dropLast(2)    // remove x)
+                .toInt(16)
+            dir to steps
+        }
+
+        val boundary = instructions.sumOf { it.second.toLong() }
+        val corners = instructions.runningFold(origin) { acc, instruction ->
             acc + (instruction.first * instruction.second)
         }
         require(corners.first() == corners.last()) { "not a closed loop" }
 
-        // area by Shoelace algorithm https://en.wikipedia.org/wiki/Shoelace_formula
+        // area by Shoelace algorithm
+        // https://en.wikipedia.org/wiki/Shoelace_formula
         // https://youtu.be/0KjG8Pg6LGk?si=qC_1iX1YhQlGvI1o
-        val area = abs(corners.zipWithNext().sumOf { (ci, cj) ->
-            ci.x.toLong() * cj.y - cj.x.toLong() * ci.y
-        }) / 2
+        val area = abs(
+            corners
+                .zipWithNext()
+                .sumOf { (ci, cj) ->
+                    ci.x.toLong() * cj.y - cj.x.toLong() * ci.y
+                }
+        ) / 2
 
         // according to Pick's theorem: A = i + b / 2 - 1
         // https://en.wikipedia.org/wiki/Pick%27s_theorem
         val inside = area - boundary / 2 + 1
         return inside + boundary
     }
-*/
 
 }

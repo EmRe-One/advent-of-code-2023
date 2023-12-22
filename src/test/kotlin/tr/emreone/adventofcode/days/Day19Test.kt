@@ -10,7 +10,7 @@ internal class Day19Test {
     fun `execute_tests`() {
         solve<Day19>(false) {
             Resources.resourceAsList("day19_example.txt")
-                .joinToString("\n") part1 0
+                .joinToString("\n") part1 19_114 part2 167_409_079_868_000L
         }
     }
 
