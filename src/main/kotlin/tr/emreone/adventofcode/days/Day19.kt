@@ -21,6 +21,12 @@ fun PotentialPart.patch(category: Category, newRange: IntRange?): PotentialPart?
     }
 }
 
+fun PotentialPart.combinations(): Long {
+    return this.values.fold(1) { acc, i ->
+        acc * (i.last - i.first + 1L)
+    }
+}
+
 class Day19 : Day(19, 2023, "Aplenty") {
 
     sealed interface Rule {
@@ -128,12 +134,7 @@ class Day19 : Day(19, 2023, "Aplenty") {
     }
 
     override fun part2(): Long {
-        val potentialParts = mapOf(
-            Category.X to 1..4000,
-            Category.M to 1..4000,
-            Category.A to 1..4000,
-            Category.S to 1..4000,
-        )
+        val potentialParts = Category.entries.associateWith { 1..4000 }
 
         fun countAccepted(wf: Workflow, parts: PotentialPart?): Long =
             wf.rules.fold(parts to 0L) { (remaining, count), rule ->
@@ -144,15 +145,12 @@ class Day19 : Day(19, 2023, "Aplenty") {
                         "R" -> 0
                         else -> countAccepted(workflows[rule.next]!!, matching)
                     }
-                } else
+                } else {
                     null to count
+                }
             }.second
 
         return countAccepted(workflows["in"]!!, potentialParts)
     }
 
-    private fun PotentialPart.combinations(): Long =
-        this.values.fold(1) { acc, i ->
-            acc * (i.last - i.first + 1L)
-        }
 }
