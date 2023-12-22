@@ -90,9 +90,6 @@ class Day20 : Day(20, 2023, "Pulse Propagation") {
         pending += Triple("broadcaster", "button", false)
         while (pending.isNotEmpty()) {
             val (moduleName, input, pulse) = pending.removeFirst()
-
-            println("$input -${if (pulse) "high" else "low"}-> $moduleName")
-
             val module = modules[moduleName]
             if (module != null) {
                 for ((nextModule, nextPulse) in module.process(input, pulse)) {
