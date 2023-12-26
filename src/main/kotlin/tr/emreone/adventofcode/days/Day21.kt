@@ -4,11 +4,12 @@ import tr.emreone.kotlin_utils.automation.Day
 import tr.emreone.kotlin_utils.extensions.area
 import tr.emreone.kotlin_utils.extensions.formatted
 import tr.emreone.kotlin_utils.math.*
+import java.util.Queue
 
 class Day21 : Day(21, 2023, "Step Counter") {
 
     val map = inputAsGrid
-    val area = map.area
+    private val area = map.area
 
     private fun getStartingPoint(): Point {
         for (y in map.indices) {
@@ -22,23 +23,37 @@ class Day21 : Day(21, 2023, "Step Counter") {
         throw IllegalStateException("No starting point found")
     }
 
-    override fun part1(): Int {
+    private fun fillGarden(startingPoint: Point, steps: Int): Set<Point> {
+        val reachableGardenPlots = mutableSetOf<Point>()
+        val seenGardenPlots = mutableSetOf(startingPoint)
 
+        val q = ArrayDeque<Pair<Point, Int>>()
+        q.add(startingPoint to 64)
+
+        while(q.isNotEmpty()) {
+            val (point, steps) = q.removeFirst()
+
+            if (steps.mod(2) == 0) {
+                reachableGardenPlots.add(point)
+            }
+            if (steps == 0) {
+                continue
+            }
+
+            point.directNeighbors().forEach {
+                if (it in area && map[it.y][it.x] != '#' && it !in seenGardenPlots) {
+                    q.add(it to steps - 1)
+                    seenGardenPlots.add(it)
+                }
+            }
+        }
+        return reachableGardenPlots.toSet()
+    }
+
+    override fun part1(): Int {
         // find S in the map
         val startingPoint = getStartingPoint()
-        var reachableGardenPlots = setOf(startingPoint)
-
-        repeat(64) {
-            reachableGardenPlots = reachableGardenPlots
-                .map {
-                    it.directNeighbors()
-                        .filter {
-                            it in area && map[it.y][it.x] != '#'
-                        }
-                }
-                .flatten()
-                .toSet()
-        }
+        val reachableGardenPlots = this.fillGarden(startingPoint, 64)
 
         println(map.formatted { p, c ->
             if (p in reachableGardenPlots) {
@@ -51,23 +66,10 @@ class Day21 : Day(21, 2023, "Step Counter") {
         return reachableGardenPlots.size
     }
 
-    override fun part2(): Int {
-        // find S in the map
-        val startingPoint = getStartingPoint()
-        var reachableGardenPlots = setOf(startingPoint)
 
-        repeat(26_501_365) {
-            reachableGardenPlots = reachableGardenPlots
-                .map {
-                    it.directNeighbors()
-                        .filter {
-                            map[it.y.mod(map.size)][it.x.mod(map[0].size)] != '#'
-                        }
-                }
-                .flatten()
-                .toSet()
-        }
+    override fun part2(): Long {
 
-        return reachableGardenPlots.size
+
+        return 0L
     }
 }
