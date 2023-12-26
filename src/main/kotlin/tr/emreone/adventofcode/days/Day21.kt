@@ -66,9 +66,11 @@ class Day21 : Day(21, 2023, "Step Counter") {
         return reachableGardenPlots.size
     }
 
-
+    /**
+     * https://www.youtube.com/watch?v=9UOMZSL0JTg
+     * https://github.com/hyper-neutrino/advent-of-code/blob/main/2023/day21p2.py
+     */
     override fun part2(): Long {
-
 
         return 0L
     }
