@@ -2,11 +2,10 @@ package tr.emreone.adventofcode.days
 
 import tr.emreone.kotlin_utils.automation.Day
 import tr.emreone.kotlin_utils.extensions.area
-import tr.emreone.kotlin_utils.extensions.formatted
 import tr.emreone.kotlin_utils.extensions.height
 import tr.emreone.kotlin_utils.extensions.width
 import tr.emreone.kotlin_utils.math.*
-import java.util.Queue
+import kotlin.math.max
 
 class Day21 : Day(21, 2023, "Step Counter") {
 
@@ -133,12 +132,12 @@ class Day21 : Day(21, 2023, "Step Counter") {
         require(startingPoint.x == startingPoint.y)
         require(startingPoint.x == mapSize / 2)
 
-        val gridWidth = totalSteps / mapSize - 1
-        val oddMaps = ((gridWidth / 2) * 2 + 1).pow(2)
-        val evenMaps = ((gridWidth + 1) / 2 * 2).pow(2)
+        val factor = max(0, totalSteps / mapSize - 1)
+        val evenMaps = ((factor / 2) * 2 + 1).pow(2)
+        val oddMaps = ((factor + 1) / 2 * 2).pow(2)
 
-        val oddPoints = this.fillGarden(startingPoint, mapSize * 2 + 1).size
         val evenPoints = this.fillGarden(startingPoint, mapSize * 2).size
+        val oddPoints = this.fillGarden(startingPoint, mapSize * 2 + 1).size
 
         val cornerTop = this.fillGarden(Point(startingPoint.x, mapSize - 1), mapSize - 1).size
         val cornerRight = this.fillGarden(Point(0, startingPoint.y), mapSize - 1).size
@@ -161,8 +160,8 @@ class Day21 : Day(21, 2023, "Step Counter") {
             oddMaps * oddPoints.toLong(),
             evenMaps * evenPoints.toLong(),
             cornerTop + cornerRight + cornerBottom + cornerLeft.toLong(),
-            (gridWidth.toLong() + 1) * (smallTopRight + smallBottomRight + smallBottomLeft + smallTopLeft),
-            gridWidth.toLong() * (bigTopRight + bigBottomRight + bigBottomLeft + bigTopLeft)
+            (factor.toLong() + 1) * (smallTopRight + smallBottomRight + smallBottomLeft + smallTopLeft),
+            factor.toLong() * (bigTopRight + bigBottomRight + bigBottomLeft + bigTopLeft)
         )
 
         println("Total steps: $totalPoints")
