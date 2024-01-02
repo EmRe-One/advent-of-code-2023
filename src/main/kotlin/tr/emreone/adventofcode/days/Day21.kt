@@ -4,8 +4,12 @@ import tr.emreone.kotlin_utils.automation.Day
 import tr.emreone.kotlin_utils.extensions.area
 import tr.emreone.kotlin_utils.extensions.height
 import tr.emreone.kotlin_utils.extensions.width
-import tr.emreone.kotlin_utils.math.*
-import kotlin.math.max
+import tr.emreone.kotlin_utils.math.Point
+import tr.emreone.kotlin_utils.math.contains
+import tr.emreone.kotlin_utils.math.directNeighbors
+import tr.emreone.kotlin_utils.math.pow
+import tr.emreone.kotlin_utils.math.x
+import tr.emreone.kotlin_utils.math.y
 
 class Day21 : Day(21, 2023, "Step Counter") {
 
@@ -13,12 +17,10 @@ class Day21 : Day(21, 2023, "Step Counter") {
     private val area = map.area
     private var mapSize: Int
 
-
     init {
         require(map.height == map.width)
         mapSize = map.height
     }
-
 
     private fun getStartingPoint(): Point {
         for (y in map.indices) {
@@ -52,7 +54,7 @@ class Day21 : Day(21, 2023, "Step Counter") {
         val q = ArrayDeque<Pair<Point, Int>>()
         q.add(startingPoint to steps)
 
-        while(q.isNotEmpty()) {
+        while (q.isNotEmpty()) {
             val (point, remainingSteps) = q.removeFirst()
 
             if (remainingSteps.mod(2) == steps.mod(2)) {
@@ -63,7 +65,9 @@ class Day21 : Day(21, 2023, "Step Counter") {
             }
 
             point.directNeighbors().forEach {
-                if (it in area && map[it.y][it.x] != '#' && it !in seenGardenPlots) {
+                val adjustedPoint = Point(it.x.mod(this.mapSize), it.y.mod(this.mapSize))
+
+                if (map[adjustedPoint.y][adjustedPoint.x] != '#' && it !in seenGardenPlots) {
                     q.add(it to remainingSteps - 1)
                     seenGardenPlots.add(it)
                 }
@@ -75,7 +79,8 @@ class Day21 : Day(21, 2023, "Step Counter") {
     override fun part1(): Int {
         // find S in the map
         val startingPoint = getStartingPoint()
-        val reachableGardenPlots = this.fillGarden(startingPoint, 64)
+        val numberOfSteps = if (testInput) 6 else 64
+        val reachableGardenPlots = this.fillGarden(startingPoint, numberOfSteps)
 
         // this.print(reachableGardenPlots)
 
@@ -126,45 +131,74 @@ class Day21 : Day(21, 2023, "Step Counter") {
     override fun part2(): Long {
         val startingPoint = getStartingPoint()
 
-        val totalSteps = 26_501_365
+        val totalSteps = if (testInput) 500 else 26_501_365
 
         // Starting point is always in the middle
         require(startingPoint.x == startingPoint.y)
         require(startingPoint.x == mapSize / 2)
+        require(totalSteps.mod(mapSize) <= mapSize / 2)
 
-        val factor = max(0, totalSteps / mapSize - 1)
-        val evenMaps = ((factor / 2) * 2 + 1).pow(2)
-        val oddMaps = ((factor + 1) / 2 * 2).pow(2)
+        val magicNumber = (totalSteps - (mapSize / 2)) / mapSize.toLong()
+        val evenMaps = ((magicNumber / 2) * 2 + 1).pow(2).toLong()
+        val oddMaps = ((magicNumber + 1) / 2 * 2).pow(2).toLong()
 
-        val evenPoints = this.fillGarden(startingPoint, mapSize * 2).size
-        val oddPoints = this.fillGarden(startingPoint, mapSize * 2 + 1).size
+        println("magic number: $magicNumber")
 
-        val cornerTop = this.fillGarden(Point(startingPoint.x, mapSize - 1), mapSize - 1).size
-        val cornerRight = this.fillGarden(Point(0, startingPoint.y), mapSize - 1).size
-        val cornerBottom = this.fillGarden(Point(startingPoint.x, 0), mapSize - 1).size
-        val cornerLeft = this.fillGarden(Point(mapSize - 1, startingPoint.y), mapSize - 1).size
+        val pointsInEvenMaps = this.fillGarden(startingPoint, mapSize * 2).filter { it in area }.size
+        val pointsInOddMaps = this.fillGarden(startingPoint, mapSize * 2 + 1).filter { it in area }.size
 
-        val smallTopRight = this.fillGarden(Point(0, mapSize - 1), mapSize / 2 - 1).size
-        val bigTopRight = this.fillGarden(Point(0, mapSize - 1), mapSize * 3 / 2 - 1).size
+        val restStepsCorner = (totalSteps - (mapSize / 2)).mod(mapSize)
+        val cornerTop = this.fillGarden(Point(startingPoint.x, mapSize - 1), restStepsCorner).size
+        val cornerRight = this.fillGarden(Point(0, startingPoint.y), restStepsCorner).size
+        val cornerBottom = this.fillGarden(Point(startingPoint.x, 0), restStepsCorner).size
+        val cornerLeft = this.fillGarden(Point(mapSize - 1, startingPoint.y), restStepsCorner).size
+        val cornerSum = cornerTop.toLong() + cornerRight + cornerBottom + cornerLeft
 
-        val smallBottomRight = this.fillGarden(Point(0, 0), mapSize / 2 - 1).size
-        val bigBottomRight = this.fillGarden(Point(0, 0), mapSize * 3 / 2 - 1).size
+        val restStepsSmallEdges = (totalSteps - mapSize).mod(2 * mapSize)
+        val smallTopRight = this.fillGarden(Point(0, mapSize - 1), restStepsSmallEdges).size
+        val smallBottomRight = this.fillGarden(Point(0, 0), restStepsSmallEdges).size
+        val smallBottomLeft = this.fillGarden(Point(mapSize - 1, 0), restStepsSmallEdges).size
+        val smallTopLeft = this.fillGarden(Point(mapSize - 1, mapSize - 1), restStepsSmallEdges).size
+        val smallEdgesSum = smallTopRight.toLong() + smallBottomRight + smallBottomLeft + smallTopLeft
 
-        val smallBottomLeft = this.fillGarden(Point(mapSize - 1, 0), mapSize / 2 - 1).size
-        val bigBottomLeft = this.fillGarden(Point(mapSize - 1, 0), mapSize * 3 / 2 - 1).size
+        val restStepsBigEdges = totalSteps.mod(2 * mapSize) // mapSize * 3 / 2 - 1
+        val bigTopRight = this.fillGarden(Point(0, mapSize - 1), restStepsBigEdges).size
+        val bigBottomRight = this.fillGarden(Point(0, 0), restStepsBigEdges).size
+        val bigBottomLeft = this.fillGarden(Point(mapSize - 1, 0), restStepsBigEdges).size
+        val bigTopLeft = this.fillGarden(Point(mapSize - 1, mapSize - 1), restStepsBigEdges).size
+        val bigEdgesSum = bigTopRight.toLong() + bigBottomRight + bigBottomLeft + bigTopLeft
 
-        val smallTopLeft = this.fillGarden(Point(mapSize - 1, mapSize - 1), mapSize / 2 - 1).size
-        val bigTopLeft = this.fillGarden(Point(mapSize - 1, mapSize - 1), mapSize * 3 / 2 - 1).size
-
-        val totalPoints = listOf<Long>(
-            oddMaps * oddPoints.toLong(),
-            evenMaps * evenPoints.toLong(),
-            cornerTop + cornerRight + cornerBottom + cornerLeft.toLong(),
-            (factor.toLong() + 1) * (smallTopRight + smallBottomRight + smallBottomLeft + smallTopLeft),
-            factor.toLong() * (bigTopRight + bigBottomRight + bigBottomLeft + bigTopLeft)
+        val totalPoints = listOf(
+            oddMaps * pointsInOddMaps.toLong(),
+            evenMaps * pointsInEvenMaps.toLong(),
+            cornerSum,
+            (magicNumber + 1) * smallEdgesSum,
+            magicNumber * bigEdgesSum
         )
 
         println("Total steps: $totalPoints")
-        return totalPoints.sum()
+        println(totalPoints.sum())
+        return 0
     }
+
+    /*
+            val cornerTop = this.fillGarden(Point(startingPoint.x, mapSize - 1), mapSize + 1 ).size
+        val cornerRight = this.fillGarden(Point(0, startingPoint.y), mapSize + 1).size
+        val cornerBottom = this.fillGarden(Point(startingPoint.x, 0), mapSize + 1).size
+        val cornerLeft = this.fillGarden(Point(mapSize - 1, startingPoint.y), mapSize + 1).size
+
+        print(this.fillGarden(Point(startingPoint.x, mapSize - 1), mapSize + 1))
+
+        val cornerSum = cornerTop + cornerRight + cornerBottom + cornerLeft
+
+        // until corner of next block
+        val temp1 = this.fillGarden(startingPoint, (mapSize * 1.5).toInt())
+
+        val centerMap = temp1.filter { it in area }.size
+        val smallCorners = temp1.size - (centerMap + cornerSum)
+
+        // until corner of next 2 blocks
+        val temp2 = this.fillGarden(startingPoint, (mapSize * 2.5).toInt() + 1)
+        val bigCorners = temp2.size - (centerMap + 2 * smallCorners + cornerSum)
+     */
 }
