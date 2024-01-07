@@ -10,9 +10,11 @@ import kotlin.math.min
 class Day22 : Day(22, 2023, "Sand Slabs") {
 
     data class Brick(val id: Int, val a: Point3D, val b: Point3D) {
-        private val xRange = range { it.x.toInt() }
-        private val yRange = range { it.y.toInt() }
-        private val zRange = range { it.z.toInt() }
+        private val xRange = rangeBy { it.x.toInt() }
+        private val yRange = rangeBy { it.y.toInt() }
+        private val zRange = rangeBy { it.z.toInt() }
+
+        private fun rangeBy(f: (Point3D) -> Int) = min(f(a), f(b))..max(f(a), f(b))
 
         val xyPoints = xRange.flatMap { xi ->
             yRange.map { yi ->
@@ -25,14 +27,17 @@ class Day22 : Day(22, 2023, "Sand Slabs") {
         val maxZ
             get() = zRange.last
 
-        private fun range(f: (Point3D) -> Int) = min(f(a), f(b))..max(f(a), f(b))
-
         fun fallBy(fallAmount: Int) = copy(
             a = Point3D(x = a.x, y = a.y, z = a.z - fallAmount),
             b = Point3D(x = b.x, y = b.y, z = b.z - fallAmount)
         )
 
         override fun toString() = "[$id] $a~$b"
+
+        fun overlapsWith(other: Brick): Boolean {
+            return max(this.a.x, other.a.x) <= min(this.b.x, other.b.x)
+                    && max(this.a.y, other.a.y) <= min(this.b.y, other.b.y)
+        }
     }
 
     data class Snapshot(val bricks: Set<Brick>) {
@@ -62,19 +67,6 @@ class Day22 : Day(22, 2023, "Sand Slabs") {
         }
     }
 
-    /*
-    // PARSE
-    fun String.parsePoint3d() = split(',')
-        .map { it.toInt() }
-        .let { (x, y, z) -> Point3D(x, y, z) }
-
-    fun String.parseBrick(id: Int) = split('~').let { (a, b) ->
-        Brick(id, a.parsePoint3d(), b.parsePoint3d())
-    }
-
-    fun List<String>.parseSnapshot() = Snapshot(mapIndexed { id, line -> line.parseBrick(id) }.toSet())
-    */
-
     private val bricks = inputAsList
         .mapIndexed { index, line ->
             val (left, right) = line.split("~")
@@ -86,7 +78,6 @@ class Day22 : Day(22, 2023, "Sand Slabs") {
         }
         .toSet()
 
-    // SOLVE
     class BrickTetris(snapshot: Snapshot) {
 
         private val bricksByXY: MutableMap<Point2D, SortedSet<Brick>> = snapshot.bricks
@@ -165,9 +156,15 @@ class Day22 : Day(22, 2023, "Sand Slabs") {
     }
 
     override fun part1(): Int {
-        return Snapshot(this.bricks)
+        // https://www.youtube.com/watch?v=imz7uexX394
+
+        val removal = Snapshot(this.bricks)
             .makeBricksFall()
             .findBrickRemovalCounts()
+
+        println(removal)
+
+        return removal
             .values
             .count { it == 0 }
     }
