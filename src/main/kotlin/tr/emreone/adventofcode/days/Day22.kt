@@ -1,6 +1,8 @@
 package tr.emreone.adventofcode.days
 
+import tr.emreone.adventofcode.days.Day22.Brick.Companion.GROUND
 import tr.emreone.kotlin_utils.automation.Day
+import tr.emreone.kotlin_utils.extensions.intersects
 import tr.emreone.kotlin_utils.math.Point3D
 import java.util.*
 import kotlin.collections.ArrayDeque
@@ -9,96 +11,96 @@ import kotlin.math.min
 
 class Day22 : Day(22, 2023, "Sand Slabs") {
 
-    data class Brick(val id: Int, var a: Point3D, var b: Point3D) {
-        override fun toString() = "[$id] $a~$b"
+    private data class Brick(val id: Int, val x: IntRange, val y: IntRange, val z: IntRange) : Comparable<Brick> {
+        val supporting = mutableSetOf<Brick>()
+        val supportedBy = mutableSetOf<Brick>()
 
-        fun overlapsWith(other: Brick): Boolean {
-            return max(this.a.x, other.a.x) <= min(this.b.x, other.b.x)
-                    && max(this.a.y, other.a.y) <= min(this.b.y, other.b.y)
+        override fun compareTo(other: Brick): Int =
+            z.first - other.z.first
+
+        fun supports(other: Brick) {
+            supporting += other
+            other.supportedBy += this
+        }
+
+        fun canSupport(other: Brick): Boolean =
+            x intersects other.x && y intersects other.y && z.last + 1 == other.z.first
+
+        fun onGround(): Boolean =
+            z.first == GROUND
+
+        fun fall(restingPlace: Int): Brick =
+            copy(
+                z = restingPlace..(restingPlace + (z.last - z.first))
+            )
+
+        companion object {
+
+            const val GROUND = 1
+
+            fun of(index: Int, input: String): Brick =
+                input.split("~")
+                    .map { side -> side.split(",").map { it.toInt() } }
+                    .let { lists ->
+                        val left = lists.first()
+                        val right = lists.last()
+                        Brick(
+                            index,
+                            left[0]..right[0],
+                            left[1]..right[1],
+                            left[2]..right[2]
+                        )
+                    }
         }
     }
 
-    private val bricks = inputAsList
-        .mapIndexed { index, line ->
-            val (left, right) = line.split("~")
-
-            val (x1, y1, z1) = left.split(",").map { it.toLong() }
-            val (x2, y2, z2) = right.split(",").map { it.toLong() }
-
-            Brick(index, Point3D(x1, y1, z1), Point3D(x2, y2, z2))
-        }
-        .sortedBy { it.a.z }
-        .also {
-            it.forEachIndexed { index, brick ->
-                var maxZ = 1L
-                for (i in 0 until index) {
-                    val other = it.elementAt(i)
-                    if (brick.overlapsWith(other)) {
-                        maxZ = max(maxZ, other.b.z + 1)
-                    }
+    private fun List<Brick>.settle(): List<Brick> = buildList {
+        this@settle.forEach { brick ->
+            var current = brick
+            do {
+                var settled = false
+                val supporters = filter { below -> below.canSupport(current) }
+                if (supporters.isEmpty() && !current.onGround()) {
+                    val restingPlace = filter { it.z.last < current.z.first - 1 }
+                        .maxOfOrNull { it.z.last }?.let { it + 1 } ?: GROUND
+                    current = current.fall(restingPlace)
+                } else {
+                    settled = true
+                    supporters.forEach { below -> below.supports(current) }
+                    add(current)
                 }
-                brick.b = Point3D(brick.b.x, brick.b.y, brick.b.z - brick.a.z + maxZ)
-                brick.a = Point3D(brick.a.x, brick.a.y, maxZ)
-            }
+            } while (!settled)
         }
-        .sortedBy { it.a.z }
+    }
 
+    private fun List<Brick>.structurallySignificant(): List<Brick> =
+        filter { brick -> brick.supporting.any { it.supportedBy.size == 1 } }
+
+    private fun Brick.topple(): Set<Brick> = buildSet {
+        add(this@topple)
+        val untoppled = (bricks - this).toMutableSet()
+        do {
+            val willFall = untoppled
+                .filter { it.supportedBy.isNotEmpty() }
+                .filter { it.supportedBy.all { brick -> brick in this } }
+                .also {
+                    untoppled.removeAll(it)
+                    addAll(it)
+                }
+        } while (willFall.isNotEmpty())
+    }
+
+    private val bricks: List<Brick> = inputAsList
+        .mapIndexed { index, row -> Brick.of(index, row) }
+        .sorted()
+        .settle()
 
     override fun part1(): Int {
-        // https://www.youtube.com/watch?v=imz7uexX394
-
-        val supports = this.bricks.associate { it.id to mutableSetOf<Int>() }
-        val supportedBy = this.bricks.associate { it.id to mutableSetOf<Int>() }
-
-        this.bricks.forEachIndexed { j, upperBrick ->
-            this.bricks.subList(0, j).forEachIndexed { i, lowerBrick ->
-                if (upperBrick.overlapsWith(lowerBrick) && upperBrick.a.z == lowerBrick.b.z + 1) {
-                    supports[i]!! += j
-                    supportedBy[j]!! += i
-                }
-            }
-        }
-
-        return supports.values.count { set ->
-            set.all { supportedBy[it]!!.size > 1 }
-        }
+        return bricks.size - bricks.structurallySignificant().size
     }
 
     override fun part2(): Int {
-        val supports = this.bricks.associate { it.id to mutableSetOf<Int>() }
-        val supportedBy = this.bricks.associate { it.id to mutableSetOf<Int>() }
-
-        this.bricks.forEachIndexed { j, upperBrick ->
-            this.bricks.subList(0, j).forEachIndexed { i, lowerBrick ->
-                if (upperBrick.overlapsWith(lowerBrick) && upperBrick.a.z == lowerBrick.b.z + 1) {
-                    supports[i]!! += j
-                    supportedBy[j]!! += i
-                }
-            }
-        }
-
-        var total = 0
-
-        this.bricks.forEachIndexed { i, brick ->
-            val q: Deque<Int> = LinkedList(supports[brick.id]!!.filter { supportedBy[it]!!.size == 1 })
-
-            val falling = q.toMutableSet()
-            falling.add(i)
-
-            while (q.isNotEmpty()) {
-                val j = q.pop()
-                for (k in (supports[j]!! - falling)) {
-                    if (supportedBy[k]!!.all { falling.contains(it) }) {
-                        q.add(k)
-                        falling.add(k)
-                    }
-                }
-            }
-
-            total += falling.size - 1
-        }
-
-        return total
+        return bricks.structurallySignificant().sumOf { it.topple().size - 1 }
     }
 
 }
