@@ -43,7 +43,7 @@ IMAGE_DIR = SOURCE_CODE_DIR / "aoc_tiles"
 README_PATH = SOURCE_CODE_DIR / "README.md"
 
 # Path to the cookie session file
-SESSION_COOKIE_PATH = SOURCE_CODE_DIR / "session.cookie"
+SESSION_COOKIE_PATH = SOURCE_CODE_DIR / "src/main/resources/session.cookie"
 
 DAY_IMPLEMENTATION_DIR = SOURCE_CODE_DIR / "src/main/kotlin/tr/emreone/adventofcode/days"
 
@@ -124,7 +124,7 @@ AOC_TILES_SCRIPT_DIR = Path(__file__).absolute().parent
 CACHE_DIR = AOC_TILES_SCRIPT_DIR / ".aoc_tiles_cache"
 
 # Overrides day 24 part 2 and day 25 both parts to be unsolved
-DEBUG = True
+DEBUG = False
 
 # URL for the personal leaderboard (same for everyone)
 PERSONAL_LEADERBOARD_URL = "https://adventofcode.com/{year}/leaderboard/self"

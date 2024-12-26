@@ -55,7 +55,7 @@ class Day23 : Day(23, 2023, "A Long Walk") {
                         val numberOfNeighbors = Direction4.entries
                             .map { dir -> this + dir.vector }
                             .count {
-                                this.x in grid.first().indices && this.y in grid.indices && grid[this.y][this.x] != '#'
+                                it.x in grid.first().indices && it.y in grid.indices && grid[it.y][it.x] != '#'
                             }
 
                         if (numberOfNeighbors > 2) {
